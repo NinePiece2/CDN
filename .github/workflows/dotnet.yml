@@ -13,13 +13,20 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Set up .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '4.7.2'
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
 
-    - name: Build with dotnet
-      run: dotnet build Offline-CDN\Offline-CDN.csproj --configuration Release
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
+      
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1.1
+    
+    - name: Restore Packages
+      run: nuget restore Offline-CDN.sln
+    
+    - name: Build solution
+      run: msbuild Offline-CDN.sln -t:rebuild -property:Configuration=Release
 
   deploy:
     runs-on: [self-hosted]
