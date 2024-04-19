@@ -26,13 +26,12 @@ jobs:
       run: nuget restore Offline-CDN.sln
     
     - name: Build solution
-      run: msbuild Offline-CDN.sln -t:rebuild -property:Configuration=Release -p:DeployOnBuild=true -p:WebPublishMethod=Package -p:PackageAsSingleFile=true -p:SkipInvalidConfigurations=true
+      run: msbuild Offline-CDN.sln -t:rebuild -property:Configuration=Release -p:DeployOnBuild=true -p:WebPublishMethod=Package -p:PackageAsSingleFile=true -p:SkipInvalidConfigurations=true -p:PackageLocation="$(github.workspace)/deploy"
 
   deploy:
     needs: build
     runs-on: [self-hosted]
     
-    steps:
+    steps:    
     - name: Deploy to IIS
-      run: Copy-Item ${{env.DOTNET_ROOT}}/Offline-CDN/* C:\Users\Romit\Documents\Deployments\Offline-CDN -Recurse -Force
-
+      run: Expand-Archive -Path '$(github.workspace)/deploy/Offline-CDN.zip' -DestinationPath 'C:\Users\Romit\Documents\Deployments\Offline-CDN'
