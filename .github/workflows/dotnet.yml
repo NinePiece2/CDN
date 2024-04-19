@@ -1,0 +1,58 @@
+name: ASP.NET Framework Build and Deploy
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:    
+    runs-on: [self-hosted]
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '4.7.2'
+
+    - name: Build with dotnet
+      run: dotnet build Offline-CDN\Offline-CDN.csproj --configuration Release
+
+  deploy:
+    runs-on: [self-hosted]
+    
+    steps:
+    - name: Project publish
+      run: dotnet publish -c Release Offline-CDN\Offline-CDN.csproj -o ${{env.DOTNET_ROOT}}/Offline-CDN
+
+    - name: Deploy to IIS
+      run: |
+        # if ((Get-WebSiteState -Name AspNetCoreAPI).Value -eq "Started")
+        # {
+        #     Stop-WebSite -Name AspNetCoreAPI
+        #     echo "Stopped Website AspNetCoreAPI"
+        # }
+        # if ((Get-WebAppPoolState -Name AspNetCoreAPI).Value -eq "Started")
+        # {
+        #     Stop-WebAppPool -Name AspNetCoreAPI
+        #     echo "Stopped Application Pool AspNetCoreAPI"
+        # }
+        
+        # Start-Sleep -s 15        
+        Copy-Item ${{env.DOTNET_ROOT}}/Offline-CDN/* C:\Users\Romit\Documents\Deployments\Offline-CDN -Recurse -Force
+        
+        # if ((Get-WebSiteState -Name AspNetCoreAPI).Value -eq "Stopped")
+        # {
+        #     Start-WebSite -Name AspNetCoreAPI
+        #     echo "Started Website AspNetCoreAPI"
+        # }
+        # if ((Get-WebAppPoolState -Name AspNetCoreAPI).Value -eq "Stopped")
+        # {
+        #     Start-WebAppPool -Name AspNetCoreAPI
+        #     echo "Started Application Pool AspNetCoreAPI"
+        # }
+        
+        if ($lastexitcode -lt 8) { $global:lastexitcode = 0 }
