@@ -26,9 +26,10 @@ jobs:
       run: nuget restore Offline-CDN.sln
     
     - name: Build solution
-      run: msbuild Offline-CDN.sln -t:rebuild -property:Configuration=Release
+      run: msbuild Offline-CDN.sln -t:rebuild -property:Configuration=Release -p:DeployOnBuild=true -p:WebPublishMethod=Package -p:PackageAsSingleFile=true -p:SkipInvalidConfigurations=true
 
   deploy:
+    needs: build
     runs-on: [self-hosted]
     
     steps:
