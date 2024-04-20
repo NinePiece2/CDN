@@ -143,6 +143,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\Syncfusion\ej2\25.1.35\dist\ej2.min.js" />
+    <Content Include="Content\Syncfusion\ej2\25.1.35\fluent.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
