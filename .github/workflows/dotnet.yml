@@ -11,16 +11,14 @@ jobs:
     runs-on: [self-hosted]
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout Branch
+      uses: actions/checkout@v1
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
-
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.5
       
-    - name: setup-msbuild
-      uses: microsoft/setup-msbuild@v2
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
     
     - name: Restore Packages
       run: nuget restore Offline-CDN.sln
@@ -34,6 +32,4 @@ jobs:
     
     steps:    
     - name: Deploy to IIS
-      # run: Expand-Archive -Path '${{ github.workspace }}/deploy/Offline-CDN' -DestinationPath 'C:\Users\Romit\Documents\Deployments\Offline-CDN'
-      # run: Copy-Item ${{ github.workspace }}/deploy/Offline-CDN/* C:\Users\Romit\Documents\Deployments\Offline-CDN -Recurse -Force
       run: msdeploy -verb:sync -source:package="${{ github.workspace }}\deploy\Offline-CDN.zip" -dest:auto -setParam:name=`"IIS Web Application Name`",value=Offline-CDN
