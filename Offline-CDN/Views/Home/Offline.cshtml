@@ -50,6 +50,21 @@
         }
     }
 
+    button {
+        background-color: #4CAF50; /* Same as h1 color */
+        color: white; /* Same as body color */
+        padding: 10px 20px; /* Space inside the button */
+        margin: 20px 0; /* Space around the button */
+        border: none; /* Remove default button border */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Change cursor to hand icon when over the button */
+        font-size: 16px; /* Same as p font size */
+    }
+
+    button:hover {
+        background-color: #45a049; /* Darker green */
+    }
+
 </style>
 
 <!DOCTYPE html>
@@ -64,7 +79,18 @@
     <div class="container">
         <h1>We're currently offline</h1>
         <p>Our application is undergoing scheduled maintenance. We appreciate your patience and apologize for any inconvenience. Please check back soon!</p>
+        <button onclick="goBack()">Retry</button>
     </div>
+
+    <script>
+        function goBack() {
+            if (document.referrer) {
+                window.location.href = document.referrer;
+            } else {
+                window.history.back();
+            }
+        }
+    </script>
 </body>
 </html>
 
