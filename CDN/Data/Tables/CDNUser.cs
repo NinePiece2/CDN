@@ -11,6 +11,5 @@ public class CDNUser : IdentityUser
 {
     [MaxLength(255)]
     public string? Name { get; set; }
-    public bool AccountApproved { get; set; }
 }
 

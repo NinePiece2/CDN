@@ -1,4 +1,5 @@
-﻿@inject SignInManager<CDNUser> SignInManager
+﻿@using CDN.Data.Tables
+@inject SignInManager<CDNUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
