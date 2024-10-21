@@ -12,6 +12,8 @@ public class CDNContext : IdentityDbContext<CDNUser>
     {
     }
 
+    public DbSet<PowerSettings> PowerSettings { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -23,5 +25,10 @@ public class CDNContext : IdentityDbContext<CDNUser>
         builder.Entity<IdentityUserLogin<string>>(entity => entity.ToTable("UserLogins"));
         builder.Entity<IdentityRoleClaim<string>>(entity => entity.ToTable("RoleClaims"));
         builder.Entity<IdentityUserToken<string>>(entity => entity.ToTable("UserTokens"));
+
+        builder.Entity<PowerSettings>(entity =>
+        {
+            entity.HasKey(e => e.Key);
+        });
     }
 }
