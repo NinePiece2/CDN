@@ -12,11 +12,51 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+body, h1, p {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: #121212;
+    color: #FFFFFF;
+}
+
+
+/* Navbar styles */
+.navbar {
+    background-color: #2a2a2a !important; /* Dark background color */
+    border-bottom: 2px solid #4CAF50; /* Add a border to the bottom of the navbar */
+    padding: 10px 0; /* Add padding to the top and bottom */
+}
+
+/* Navbar links */
+.navbar-nav .nav-link {
+    color: white !important; /* White text color */
+    transition: color 0.3s ease; /* Smooth transition for text color change */
+    padding: 10px 15px; /* Add padding to the links */
+    border-radius: 5px; /* Add border-radius for rounded corners */
+    text-decoration: none; /* Remove underline by default */
+}
+
+    /* Navbar link hover effect */
+    .navbar-nav .nav-link:hover {
+        background-color: #4CAF50;
+        color: white !important; /* White text color */
+        text-decoration: none; /* Remove underline on hover */
+    }
+
+/* Active navigation item style */
+.navbar-nav .nav-item.active .nav-link {
+    background-color: #4CAF50;
+}
+
+/* Optional: Add some margin to the right of the navbar items */
+.navbar-nav .nav-item:not(:last-child) {
+    margin-right: 20px;
+}
+
+.navbar-brand {
+    color: white !important;
 }
