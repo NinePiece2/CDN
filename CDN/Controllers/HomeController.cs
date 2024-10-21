@@ -1,4 +1,5 @@
 using CDN.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -18,7 +19,7 @@ namespace CDN.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Offline()
         {
             return View();
         }

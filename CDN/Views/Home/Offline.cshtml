@@ -1,0 +1,94 @@
+﻿@{
+    Layout = "_HomeLayout";
+}
+
+<style>
+    /* Basic Reset */
+    body, h1, p {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: black;
+        color: #FFFFFF;
+        text-align: center;
+    }
+
+    .container {
+        padding: 20px;
+        background: #121212;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        max-width: 600px;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        color: #4CAF50;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    @@media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+        h1 {
+            font-size: 22px;
+        }
+        p {
+            font-size: 14px;
+        }
+    }
+
+    button {
+        background-color: #4CAF50; /* Same as h1 color */
+        color: white; /* Same as body color */
+        padding: 10px 20px; /* Space inside the button */
+        margin: 20px 0; /* Space around the button */
+        border: none; /* Remove default button border */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Change cursor to hand icon when over the button */
+        font-size: 16px; /* Same as p font size */
+    }
+
+    button:hover {
+        background-color: #45a049; /* Darker green */
+    }
+
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Offline</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>We're currently offline</h1>
+        <p>Our application is undergoing scheduled maintenance. We appreciate your patience and apologize for any inconvenience. Please check back soon!</p>
+        <button onclick="goBack()">Retry</button>
+    </div>
+
+    <script>
+        function goBack() {
+            if (document.referrer) {
+                window.location.href = document.referrer;
+            } else {
+                window.history.back();
+            }
+        }
+    </script>
+</body>
+</html>
