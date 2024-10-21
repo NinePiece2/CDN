@@ -60,3 +60,17 @@ body {
 .navbar-brand {
     color: white !important;
 }
+
+input {
+    color: white !important;
+    background-color: #1e1e22 !important;
+}
+
+.form-control {
+    color: white !important;
+}
+
+.form-check-input {
+    border-color: #FFFFFF !important;
+    background-color: #1e1e22 !important;
+}

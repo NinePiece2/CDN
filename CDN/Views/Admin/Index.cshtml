@@ -1,5 +1,227 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewBag.Title = "Admin";
 }
+
+<style>
+    .container {
+        margin-top: 20px;
+    }
+
+    .folder-btn {
+        background-color: #f0f0f0;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .folder-btn:hover {
+        background-color: #ccc;
+    }
+
+    div {
+        margin-bottom: 10px;
+    }
+
+</style>
+
+<div class="container">
+    <div id="folder-structure">
+        <!-- This will dynamically load the folder structure -->
+    </div>
+
+    <div>
+        <h3>Upload File</h3>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="fileInput" />
+            <input type="text" id="currentFolder" hidden />
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+
+    <div>
+        <h3>Create Folder</h3>
+        <form id="createFolderForm">
+            <input type="text" id="folderName" placeholder="Folder name" />
+            <input type="text" id="currentFolderForCreate" hidden />
+            <button type="submit">Create Folder</button>
+        </form>
+    </div>
+
+    <div>
+        <h3>Upload Folder</h3>
+        <form id="uploadFolderForm" enctype="multipart/form-data">
+            <input type="file" id="folderInput" webkitdirectory directory multiple />
+            <input type="text" id="currentFolderForUploadFolder" hidden />
+            <button type="submit">Upload Folder</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        loadFolderContents('/'); // Load root folder on page load
+
+        // Handle folder click
+        document.getElementById('folder-structure').addEventListener('click', function (e) {
+            if (e.target && e.target.nodeName === 'BUTTON') {
+                var folderPath = e.target.getAttribute('data-path');
+                loadFolderContents(folderPath);
+            }
+        });
+
+        // File upload form
+        document.getElementById('uploadForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var fileInput = document.getElementById('fileInput');
+            var currentFolder = document.getElementById('currentFolder').value;
+
+            var formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('folder', currentFolder);
+
+            $.ajax({
+                url: '/Admin/UploadFile',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    alert(data.message);
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+        });
+
+        // Create folder form
+        document.getElementById('createFolderForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var folderName = document.getElementById('folderName').value;
+            var currentFolder = document.getElementById('currentFolderForCreate').value;
+
+            $.ajax({
+                url: '/Admin/CreateFolder',
+                type: 'POST',
+                data: { folderName: folderName, parentFolder: currentFolder },
+                success: function (data) {
+                    alert(data.message);
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+        });
+
+        // Folder upload form
+        document.getElementById('uploadFolderForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var folderInput = document.getElementById('folderInput');
+            var currentFolder = document.getElementById('currentFolderForUploadFolder').value;
+            var uploadedFolder;
+
+            var formData = new FormData();
+
+            // Append all files from the folder to the form data
+            for (let i = 0; i < folderInput.files.length; i++) {
+                formData.append('files', folderInput.files[i], folderInput.files[i].webkitRelativePath);
+            }
+
+            // Extract the folder name from the first file's relative path
+            if (folderInput.files.length > 0) {
+                var firstFilePath = folderInput.files[0].webkitRelativePath;
+                uploadedFolder = firstFilePath.split('/')[0]; // Folder name is the first part of the path
+                console.log('Uploaded folder name:', uploadedFolder);
+            }
+
+            $.ajax({
+                url: '/Admin/CreateFolder',
+                type: 'POST',
+                data: { folderName: uploadedFolder, parentFolder: currentFolder },
+                success: function (data) {
+
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+
+            formData.append('folder', currentFolder + '/' + uploadedFolder);
+
+            $.ajax({
+                url: '/Admin/UploadFolder',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    alert(data.message);
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+        });
+
+    });
+
+    // Load folder contents and display them in the UI
+    function loadFolderContents(folderPath) {
+        $.ajax({
+            url: `/Admin/BrowseFolder?folderPath=${encodeURIComponent(folderPath)}`,
+            type: 'GET',
+            success: function (data) {
+                var folderStructure = document.getElementById('folder-structure');
+                folderStructure.innerHTML = '';
+
+                // Check if the current folder is not the root
+                if (folderPath !== '/') {
+                    // Get parent folder path by removing the last directory in the path
+                    var parentFolder = folderPath.substring(0, folderPath.lastIndexOf('/')) || '/';
+
+                    // Add Back button
+                    folderStructure.innerHTML += `
+                        <button class="back-btn" onclick="loadFolderContents('${parentFolder}')">
+                            ⬅️ Back
+                        </button><br>
+                    `;
+                }
+
+                // Check if the data array is empty
+                if (data.length === 0) {
+                    folderStructure.innerHTML += '<div>No files or folders in this directory.</div>';
+                } else {
+                    // Loop through the data and display directories and files
+                    data.forEach(item => {
+                        if (item.type === 1) { // Type 1 is for directories
+                            folderStructure.innerHTML += `
+                                <button data-path="${item.fullName}" class="folder-btn">
+                                    📁 ${item.name}
+                                </button><br>
+                            `;
+                        } else if (item.type === 0) { // Type 0 is for files
+                            folderStructure.innerHTML += `
+                                <div>
+                                    📄 ${item.name}
+                                </div>
+                            `;
+                        }
+                    });
+                }
+
+                // Set current folder path for uploading and creating folders
+                document.getElementById('currentFolder').value = folderPath;
+                document.getElementById('currentFolderForCreate').value = folderPath;
+                document.getElementById('currentFolderForUploadFolder').value = folderPath;
+            },
+            error: function (err) {
+                console.error(err);
+            }
+        });
+    }
+
+
+
+
+</script>

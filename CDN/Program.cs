@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using CDN.Data;
 using CDN.Data.Tables;
+using CDN.Services;
 
 namespace CDN
 {
@@ -25,6 +26,8 @@ namespace CDN
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddTransient<IFtpFileService, FtpFileService>();
 
             var app = builder.Build();
 
