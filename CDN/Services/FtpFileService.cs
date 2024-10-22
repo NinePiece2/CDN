@@ -42,9 +42,10 @@ namespace CDN.Services
             client.Config.DataConnectionType = FtpDataConnectionType.AutoPassive;
 
             client.Config.DataConnectionEncryption = true;
-            client.Config.SslProtocols = SslProtocols.Tls12;
+            client.Config.SslProtocols = SslProtocols.Tls13;
             client.Config.LogToConsole = true;
             client.Config.InternetProtocolVersions = FtpIpVersion.IPv4;
+            client.Config.CheckCapabilities = true;
 
         }
 

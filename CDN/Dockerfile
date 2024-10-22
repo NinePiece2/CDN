@@ -28,3 +28,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "CDN.dll"]
+
+#apt-get update && apt-get install -y curl
