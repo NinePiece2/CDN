@@ -24,10 +24,6 @@ FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./CDN.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-USER root    # Switch to root user to install curl
-RUN apt-get update && apt-get install -y curl  # Install curl
-USER app     # Switch back to the non-root user
-
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
