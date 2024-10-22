@@ -36,4 +36,4 @@ jobs:
     
     steps:    
     - name: Deploy to IIS
-      run: msdeploy -verb:sync -source:package="${{ github.workspace }}\deploy\CDM.zip" -dest:auto -setParam:name=`"IIS Web Application Name`",value=`"CDN`"
+      run: msdeploy -verb:sync -source:package="${{ github.workspace }}\deploy\CDN.zip" -dest:auto -setParam:name=`"IIS Web Application Name`",value=`"CDN`"
