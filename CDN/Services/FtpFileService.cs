@@ -38,7 +38,7 @@ namespace CDN.Services
             // Enable FTPS(FTP over SSL / TLS)
             client.Config.EncryptionMode = FtpEncryptionMode.Explicit; // Enable TLS
             client.Config.ValidateAnyCertificate = true; 
-            client.Config.DataConnectionType = FtpDataConnectionType.PassiveExtended;
+            client.Config.DataConnectionType = FtpDataConnectionType.PASV;
 
             client.Config.DataConnectionEncryption = true;
             client.Config.SslProtocols = SslProtocols.Tls12;
