@@ -19,7 +19,7 @@ namespace CDN.Services
         Task<Stream> DownloadFileAsync(string remoteFilePath);
     }
 
-    public class FtpFileService : IFtpFileService, IHostedService
+    public class FtpFileService : IFtpFileService
     {
         private string _ftpHost = "ftp://localhost";
         private string _ftpUser = "ftpuser";
@@ -170,21 +170,6 @@ namespace CDN.Services
 
             await client.Disconnect();
             return memoryStream;
-        }
-
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            // Your startup logic here
-            Console.WriteLine("Service is starting.");
-            return Task.CompletedTask;
-        }
-
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
-            // Your shutdown logic here
-            await client.Disconnect();
-            Console.WriteLine("Service is stopping.");
         }
 
     }
