@@ -13,6 +13,7 @@ public class CDNContext : IdentityDbContext<CDNUser>
     }
 
     public DbSet<PowerSettings> PowerSettings { get; set; }
+    public DbSet<AllowedOrigins> AllowedOrigins { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -29,6 +30,11 @@ public class CDNContext : IdentityDbContext<CDNUser>
         builder.Entity<PowerSettings>(entity =>
         {
             entity.HasKey(e => e.Key);
+        });
+
+        builder.Entity<AllowedOrigins>(entity =>
+        {
+            entity.HasKey(e => e.Id);
         });
     }
 }

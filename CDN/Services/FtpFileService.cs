@@ -14,6 +14,7 @@ namespace CDN.Services
         Task UploadFileAsync(Stream fileStream, string fileName, string folderPath);
         Task CreateFolderAsync(string folderPath);
         Task UploadDirectoryFromStreamsAsync(List<(Stream fileStream, string fileName)> files, string remoteDirectoryPath);
+        Task<Stream> DownloadFileAsync(string remoteFilePath);
     }
 
     public class FtpFileService : IFtpFileService, IHostedService
@@ -45,6 +46,9 @@ namespace CDN.Services
             await client.AutoConnect();
 
             var items = await client.GetListing(folderPath);
+
+            await client.Disconnect();
+
             return new List<FtpListItem>(items);
            
         }
@@ -79,6 +83,7 @@ namespace CDN.Services
                 {
                     File.Delete(tempFilePath);
                 }
+                await client.Disconnect();
             } 
         }
 
@@ -92,7 +97,9 @@ namespace CDN.Services
             {
                 await client.CreateDirectory(folderPath);
             }
-            
+
+            await client.Disconnect();
+
         }
 
         public async Task UploadDirectoryFromStreamsAsync(List<(Stream fileStream, string fileName)> files, string remoteDirectoryPath)
@@ -133,9 +140,23 @@ namespace CDN.Services
                 {
                     Directory.Delete(tempDirectory, true); // Delete directory and its contents
                 }
+                await client.Disconnect();
             }
             
         }
+
+        public async Task<Stream> DownloadFileAsync(string remoteFilePath)
+        {
+            await client.AutoConnect();
+
+            var memoryStream = new MemoryStream();
+            await client.DownloadStream(memoryStream, remoteFilePath);
+            memoryStream.Position = 0; // Reset the stream position to the beginning
+
+            await client.Disconnect();
+            return memoryStream;
+        }
+
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
