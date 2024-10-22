@@ -6,6 +6,10 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8443
 
+# Add passive FTP port range (example: 50000-50010)
+EXPOSE 21
+EXPOSE 30000-31000
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
