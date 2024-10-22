@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CDN.Data;
 using System.Runtime.Intrinsics.X86;
+using System.Security.Authentication;
 
 
 namespace CDN.Services
@@ -38,8 +39,9 @@ namespace CDN.Services
             client.Config.ValidateAnyCertificate = true; 
             client.Config.DataConnectionType = FtpDataConnectionType.AutoPassive;
 
-
             client.Config.DataConnectionEncryption = true;
+            client.Config.SslProtocols = SslProtocols.Tls12;
+
         }
 
         public async Task<List<FtpListItem>> GetFolderContentsAsync(string folderPath)
