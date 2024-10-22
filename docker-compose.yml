@@ -6,6 +6,7 @@ services:
     container_name: CDN
     ports:
       - "8443:8443"
+      - "50000-51000:50000-51000"
     volumes:
       - /root/certs:/https:ro
     environment:
