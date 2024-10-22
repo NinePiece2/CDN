@@ -47,7 +47,7 @@ namespace CDN.Services
 
         public async Task<List<FtpListItem>> GetFolderContentsAsync(string folderPath)
         {
-            await client.AutoConnect();
+            await client.Connect();
 
             var items = await client.GetListing(folderPath);
 
@@ -59,7 +59,7 @@ namespace CDN.Services
 
         public async Task UploadFileAsync(Stream fileStream, string fileName, string folderPath)
         {
-            await client.AutoConnect();
+            await client.Connect();
 
             // Create folder if it doesn't exist
             if (!await client.DirectoryExists(folderPath))
@@ -95,7 +95,7 @@ namespace CDN.Services
         public async Task CreateFolderAsync(string folderPath)
         {
             
-            await client.AutoConnect();
+            await client.Connect();
 
             if (!await client.DirectoryExists(folderPath))
             {
@@ -108,7 +108,7 @@ namespace CDN.Services
 
         public async Task UploadDirectoryFromStreamsAsync(List<(Stream fileStream, string fileName)> files, string remoteDirectoryPath)
         {
-            await client.AutoConnect();
+            await client.Connect();
 
             // Create remote folder if it doesn't exist
             if (!await client.DirectoryExists(remoteDirectoryPath))
@@ -151,7 +151,7 @@ namespace CDN.Services
 
         public async Task<Stream> DownloadFileAsync(string remoteFilePath)
         {
-            await client.AutoConnect();
+            await client.Connect();
 
             var memoryStream = new MemoryStream();
             await client.DownloadStream(memoryStream, remoteFilePath);
