@@ -41,12 +41,13 @@ namespace CDN.Services
 
             client.Config.DataConnectionEncryption = true;
             client.Config.SslProtocols = SslProtocols.Tls12;
+            client.Config.LogToConsole = true;
 
         }
 
         public async Task<List<FtpListItem>> GetFolderContentsAsync(string folderPath)
         {
-            await client.Connect();
+            await client.AutoConnect();
 
             var items = await client.GetListing(folderPath);
 
@@ -58,7 +59,7 @@ namespace CDN.Services
 
         public async Task UploadFileAsync(Stream fileStream, string fileName, string folderPath)
         {
-            await client.Connect();
+            await client.AutoConnect();
 
             // Create folder if it doesn't exist
             if (!await client.DirectoryExists(folderPath))
@@ -94,7 +95,7 @@ namespace CDN.Services
         public async Task CreateFolderAsync(string folderPath)
         {
             
-            await client.Connect();
+            await client.AutoConnect();
 
             if (!await client.DirectoryExists(folderPath))
             {
@@ -107,7 +108,7 @@ namespace CDN.Services
 
         public async Task UploadDirectoryFromStreamsAsync(List<(Stream fileStream, string fileName)> files, string remoteDirectoryPath)
         {
-            await client.Connect();
+            await client.AutoConnect();
 
             // Create remote folder if it doesn't exist
             if (!await client.DirectoryExists(remoteDirectoryPath))
@@ -150,7 +151,7 @@ namespace CDN.Services
 
         public async Task<Stream> DownloadFileAsync(string remoteFilePath)
         {
-            await client.Connect();
+            await client.AutoConnect();
 
             var memoryStream = new MemoryStream();
             await client.DownloadStream(memoryStream, remoteFilePath);
