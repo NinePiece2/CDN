@@ -35,10 +35,10 @@ namespace CDN.Services
             _ftpPass = _context.PowerSettings.Find("FTPPass")?.Value ?? _ftpPass;
 
             client = new AsyncFtpClient(_ftpHost, _ftpUser, _ftpPass);
+
             // Enable FTPS(FTP over SSL / TLS)
             client.Config.EncryptionMode = FtpEncryptionMode.Explicit; // Enable TLS
             client.Config.ValidateAnyCertificate = true; 
-            client.Config.DataConnectionType = FtpDataConnectionType.PASV;
 
             client.Config.DataConnectionEncryption = true;
             client.Config.SslProtocols = SslProtocols.Tls12;
