@@ -3,29 +3,25 @@
 }
 
 <style>
-    .container {
-        margin-top: 20px;
-    }
-
+    
     .folder-btn {
-        background-color: #f0f0f0;
+        background-color: #121212;
         border: none;
         padding: 10px;
         cursor: pointer;
+        color: white;
     }
 
     .folder-btn:hover {
-        background-color: #ccc;
-    }
-
-    div {
-        margin-bottom: 10px;
+        background-color: #4CAF50;
     }
 
 </style>
 
-<div class="container">
-    <div id="folder-structure">
+<div class="container" style=" margin-top: 20px;">
+    <h3>Files</h3>
+    <h4 id="path">/</h4>
+    <div id="folder-structure" style="margin-bottom: 5vh;">
         <!-- This will dynamically load the folder structure -->
     </div>
 
@@ -86,6 +82,7 @@
                 processData: false,
                 contentType: false,
                 success: function (data) {
+                    loadFolderContents(currentFolder);
                     alert(data.message);
                 },
                 error: function (err) {
@@ -105,6 +102,7 @@
                 type: 'POST',
                 data: { folderName: folderName, parentFolder: currentFolder },
                 success: function (data) {
+                    loadFolderContents(currentFolder);
                     alert(data.message);
                 },
                 error: function (err) {
@@ -156,6 +154,7 @@
                 processData: false,
                 contentType: false,
                 success: function (data) {
+                    loadFolderContents(currentFolder);
                     alert(data.message);
                 },
                 error: function (err) {
@@ -168,6 +167,11 @@
 
     // Load folder contents and display them in the UI
     function loadFolderContents(folderPath) {
+
+        if (folderPath == null){
+            folderPath = '/'
+        }
+
         $.ajax({
             url: `/Admin/BrowseFolder?folderPath=${encodeURIComponent(folderPath)}`,
             type: 'GET',
@@ -194,7 +198,9 @@
                 } else {
                     // Loop through the data and display directories and files
                     data.forEach(item => {
-                        if (item.type === 1) { // Type 1 is for directories
+                        if (item.name == '.profile' || item.name == '.bashrc' || item.name == '.bash_logout') {
+
+                        } else if (item.type === 1) { // Type 1 is for directories
                             folderStructure.innerHTML += `
                                 <button data-path="${item.fullName}" class="folder-btn">
                                     📁 ${item.name}
@@ -214,6 +220,7 @@
                 document.getElementById('currentFolder').value = folderPath;
                 document.getElementById('currentFolderForCreate').value = folderPath;
                 document.getElementById('currentFolderForUploadFolder').value = folderPath;
+                document.getElementById('path').innerText = folderPath;
             },
             error: function (err) {
                 console.error(err);
