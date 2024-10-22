@@ -43,6 +43,7 @@ namespace CDN.Services
             client.Config.DataConnectionEncryption = true;
             client.Config.SslProtocols = SslProtocols.Tls12;
             client.Config.LogToConsole = true;
+            client.Config.InternetProtocolVersions = FtpIpVersion.IPv4;
 
         }
 

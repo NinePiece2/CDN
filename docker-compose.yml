@@ -4,8 +4,7 @@ services:
   api:
     image: ninepiece2/cdn:latest
     container_name: CDN
-    ports:
-      - "8443:8443"
+    network_mode: "host"
     volumes:
       - /root/certs:/https:ro
     environment:
