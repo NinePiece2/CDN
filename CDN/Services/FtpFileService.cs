@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CDN.Data;
 using System.Runtime.Intrinsics.X86;
 using System.Security.Authentication;
+using FluentFTP.Exceptions;
 
 
 namespace CDN.Services
@@ -37,7 +38,7 @@ namespace CDN.Services
             // Enable FTPS(FTP over SSL / TLS)
             client.Config.EncryptionMode = FtpEncryptionMode.Explicit; // Enable TLS
             client.Config.ValidateAnyCertificate = true; 
-            client.Config.DataConnectionType = FtpDataConnectionType.AutoActive;
+            client.Config.DataConnectionType = FtpDataConnectionType.PassiveExtended;
 
             client.Config.DataConnectionEncryption = true;
             client.Config.SslProtocols = SslProtocols.Tls12;
@@ -47,19 +48,28 @@ namespace CDN.Services
 
         public async Task<List<FtpListItem>> GetFolderContentsAsync(string folderPath)
         {
-            await client.Connect();
+            try
+            {
+                await client.AutoConnect();
+                var items = await client.GetListing(folderPath);
+                return new List<FtpListItem>(items);
+            }
+            catch (FtpCommandException ex)
+            {
+                // Log detailed error message
+                Console.WriteLine($"FTP command failed: {ex.Message}");
+                throw; // Re-throw or handle as needed
+            }
+            finally
+            {
+                await client.Disconnect();
+            }
 
-            var items = await client.GetListing(folderPath);
-
-            await client.Disconnect();
-
-            return new List<FtpListItem>(items);
-           
         }
 
         public async Task UploadFileAsync(Stream fileStream, string fileName, string folderPath)
         {
-            await client.Connect();
+            await client.AutoConnect();
 
             // Create folder if it doesn't exist
             if (!await client.DirectoryExists(folderPath))
@@ -95,7 +105,7 @@ namespace CDN.Services
         public async Task CreateFolderAsync(string folderPath)
         {
             
-            await client.Connect();
+            await client.AutoConnect();
 
             if (!await client.DirectoryExists(folderPath))
             {
@@ -108,7 +118,7 @@ namespace CDN.Services
 
         public async Task UploadDirectoryFromStreamsAsync(List<(Stream fileStream, string fileName)> files, string remoteDirectoryPath)
         {
-            await client.Connect();
+            await client.AutoConnect();
 
             // Create remote folder if it doesn't exist
             if (!await client.DirectoryExists(remoteDirectoryPath))
@@ -151,7 +161,7 @@ namespace CDN.Services
 
         public async Task<Stream> DownloadFileAsync(string remoteFilePath)
         {
-            await client.Connect();
+            await client.AutoConnect();
 
             var memoryStream = new MemoryStream();
             await client.DownloadStream(memoryStream, remoteFilePath);
