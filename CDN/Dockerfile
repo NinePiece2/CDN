@@ -11,6 +11,10 @@ EXPOSE 21
 EXPOSE 20
 EXPOSE 30000-31000
 
+USER root    # Switch to root user to install curl
+RUN apt-get update && apt-get install -y curl  # Install curl
+USER app     # Switch back to the non-root user
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
