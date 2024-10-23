@@ -41,7 +41,7 @@ namespace CDN.Services
             client.Config.ValidateAnyCertificate = true;
 
             // Use passive mode explicitly
-            client.Config.DataConnectionType = FtpDataConnectionType.AutoActive;
+            client.Config.DataConnectionType = FtpDataConnectionType.AutoPassive;
 
             // Enable data connection encryption (required by the server)
             client.Config.DataConnectionEncryption = true;
@@ -64,7 +64,7 @@ namespace CDN.Services
         {
             try
             {
-                await client.AutoConnect();
+                await client.Connect();
                 var items = await client.GetListing(folderPath);
                 return new List<FtpListItem>(items);
             }
