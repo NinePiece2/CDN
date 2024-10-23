@@ -36,27 +36,20 @@ namespace CDN.Services
 
             client = new AsyncFtpClient(_ftpHost, _ftpUser, _ftpPass);
 
-            // Enable FTPS (FTP over SSL/TLS)
-            client.Config.EncryptionMode = FtpEncryptionMode.Explicit; // Use TLS
+            // Enable FTPS(FTP over SSL / TLS)
+            client.Config.EncryptionMode = FtpEncryptionMode.Implicit; // Enable TLS
             client.Config.ValidateAnyCertificate = true;
+            client.Config.DataConnectionType = FtpDataConnectionType.PASV;
 
-            // Use passive mode explicitly
-            client.Config.DataConnectionType = FtpDataConnectionType.AutoActive;
-
-            // Enable data connection encryption (required by the server)
-            client.Config.DataConnectionEncryption = true;
-
-            // Use TLS 1.2 for compatibility
+            client.Config.DataConnectionEncryption = false;
             client.Config.SslProtocols = SslProtocols.Tls12;
-
             client.Config.LogToConsole = true;
             client.Config.InternetProtocolVersions = FtpIpVersion.IPv4;
-
+            client.Config.CheckCapabilities = true;
             client.Config.LogHost = true;
             client.Config.LogUserName = true;
             client.Config.LogDurations = true;
             client.Config.LogPassword = true;
-
 
         }
 
@@ -64,7 +57,7 @@ namespace CDN.Services
         {
             try
             {
-                await client.Connect();
+                await client.AutoConnect();
                 var items = await client.GetListing(folderPath);
                 return new List<FtpListItem>(items);
             }
