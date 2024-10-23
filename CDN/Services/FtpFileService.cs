@@ -41,7 +41,7 @@ namespace CDN.Services
             client.Config.ValidateAnyCertificate = true;
 
             // Use passive mode explicitly
-            client.Config.DataConnectionType = FtpDataConnectionType.PASV;
+            client.Config.DataConnectionType = FtpDataConnectionType.PORT;
 
             // Enable data connection encryption (required by the server)
             client.Config.DataConnectionEncryption = true;
