@@ -46,6 +46,10 @@ namespace CDN.Services
             client.Config.LogToConsole = true;
             client.Config.InternetProtocolVersions = FtpIpVersion.IPv4;
             client.Config.CheckCapabilities = true;
+            client.Config.LogHost = true;
+            client.Config.LogUserName = true;
+            client.Config.LogDurations = true;
+            client.Config.LogPassword = true;
 
         }
 
