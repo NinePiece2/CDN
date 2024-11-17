@@ -18,40 +18,41 @@
 
 </style>
 
-<div class="container" style=" margin-top: 20px;">
-    <h3>Files</h3>
-    <h4 id="path">/</h4>
-    <div id="folder-structure" style="margin-bottom: 5vh;">
+<div class="container mx-auto mt-5 p-6 rounded-lg text-white">
+    <h3 class="text-3xl font-semibold mb-4">Files</h3>
+    <h4 id="path" class="text-lg font-medium text-gray-400 mb-6">/</h4>
+    <div id="folder-structure" class="mb-20">
         <!-- This will dynamically load the folder structure -->
     </div>
 
-    <div>
-        <h3>Upload File</h3>
-        <form id="uploadForm" enctype="multipart/form-data">
-            <input type="file" id="fileInput" />
+    <div class="mb-10">
+        <h3 class="text-2xl font-semibold mb-4">Upload File</h3>
+        <form id="uploadForm" enctype="multipart/form-data" class="flex items-center gap-4">
+            <input type="file" id="fileInput" class="text-sm text-gray-300 file:mr-5 file:py-2 file:px-6 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500" />
             <input type="text" id="currentFolder" hidden />
-            <button type="submit">Upload</button>
+            <button type="submit" class="px-6 py-2 bg-green-600 hover:bg-green-500 text-white font-medium rounded-lg">Upload</button>
         </form>
     </div>
 
-    <div>
-        <h3>Create Folder</h3>
-        <form id="createFolderForm">
-            <input type="text" id="folderName" placeholder="Folder name" />
+    <div class="mb-10">
+        <h3 class="text-2xl font-semibold mb-4">Create Folder</h3>
+        <form id="createFolderForm" class="flex items-center gap-4">
+            <input type="text" id="folderName" placeholder="Folder name" class="px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
             <input type="text" id="currentFolderForCreate" hidden />
-            <button type="submit">Create Folder</button>
+            <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg">Create Folder</button>
         </form>
     </div>
 
-    <div>
-        <h3>Upload Folder</h3>
-        <form id="uploadFolderForm" enctype="multipart/form-data">
-            <input type="file" id="folderInput" webkitdirectory directory multiple />
+    <div class="mb-10">
+        <h3 class="text-2xl font-semibold mb-4">Upload Folder</h3>
+        <form id="uploadFolderForm" enctype="multipart/form-data" class="flex items-center gap-4">
+            <input type="file" id="folderInput" webkitdirectory directory multiple class="text-sm text-gray-300 file:mr-5 file:py-2 file:px-6 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500" />
             <input type="text" id="currentFolderForUploadFolder" hidden />
-            <button type="submit">Upload Folder</button>
+            <button type="submit" class="px-6 py-2 bg-green-600 hover:bg-green-500 text-white font-medium rounded-lg">Upload Folder</button>
         </form>
     </div>
 </div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
