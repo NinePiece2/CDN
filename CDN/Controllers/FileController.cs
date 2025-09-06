@@ -1,6 +1,7 @@
 ﻿using CDN.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace CDN.Controllers
 {
@@ -59,21 +60,21 @@ namespace CDN.Controllers
             // Download or serve the file here
             var stream = await _ftpFileService.DownloadFileAsync(file.FullName);
 
-            // Get the file extension
-            var fileExtension = Path.GetExtension(filePath).ToLowerInvariant();
+            // Use a provider to determine the content type based on the file extension.
+            // This is a more robust approach than manual if/else checks.
+            var provider = new FileExtensionContentTypeProvider();
             string contentType;
-        
-            // Determine the content type based on the file extension
-            if (fileExtension == ".pdf")
+            if (!provider.TryGetContentType(filePath, out contentType))
             {
-                contentType = "application/pdf";
-            }
-            else
-            {
-                // Default to a generic binary stream for other file types
+                // Fallback to a generic binary stream if the content type is unknown.
                 contentType = "application/octet-stream";
             }
-        
+            else if (contentType == "application/pdf")
+            {
+                return File(stream, contentType);
+            }
+
+            // Return the file with the correct content type
             return File(stream, contentType, file.Name);
         }
 
