@@ -58,7 +58,23 @@ namespace CDN.Controllers
 
             // Download or serve the file here
             var stream = await _ftpFileService.DownloadFileAsync(file.FullName);
-            return File(stream, "application/octet-stream", file.Name); // Adjust the content type as needed
+
+            // Get the file extension
+            var fileExtension = Path.GetExtension(filePath).ToLowerInvariant();
+            string contentType;
+        
+            // Determine the content type based on the file extension
+            if (fileExtension == ".pdf")
+            {
+                contentType = "application/pdf";
+            }
+            else
+            {
+                // Default to a generic binary stream for other file types
+                contentType = "application/octet-stream";
+            }
+        
+            return File(stream, contentType, file.Name);
         }
 
     }
